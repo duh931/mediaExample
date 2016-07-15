@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
   MSSndCard *sndcard;
   sndcard=ms_snd_card_manager_get_default_card(ms_snd_card_manager_get());
 
-  /* audio capture filter */
+  /*define sample audio capture filter */
   MSFilter *soundread=ms_snd_card_create_reader(sndcard);
   MSFilter *soundwrite=ms_snd_card_create_writer(sndcard);
 
@@ -35,6 +35,7 @@ int main(int argc, char* argv[]){
   ms_filter_call_method(rtpsend,MS_RTP_SEND_SET_SESSION,rtp_session);
   ms_filter_call_method(rtprecv,MS_RTP_RECV_SET_SESSION,rtp_session);
 
+/*define capture rate and initialize filters*/
   MSFilter *dtmfgen=ms_filter_new(MS_DTMF_GEN_ID);
   int sr = 8000;
   int chan=1;
@@ -66,12 +67,14 @@ int main(int argc, char* argv[]){
   ms_ticker_detach(ticker,soundread);
   ms_ticker_detach(ticker,rtprecv);
 
+/*unlink filters and destroy the MS objects*/
   ms_filter_unlink( soundread,0, encoder,0);
   ms_filter_unlink( encoder,0, rtpsend,0);
 
   ms_filter_unlink( rtprecv,0, decoder,0);
   ms_filter_unlink( decoder,0, dtmfgen,0);
   ms_filter_unlink( dtmfgen,0, soundwrite,0);
+  
 
   if (rtp_session!=NULL) rtp_session_destroy(rtp_session);
   if (rtpsend!=NULL) ms_filter_destroy(rtpsend);
