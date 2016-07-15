@@ -1,6 +1,8 @@
 # mediaExample
 
 work.c 是一个使用mediaStreamer2的例子，仍然存在未解决的error.
+work2.c是一个可编译的版本，此代码为使用mediastreamer传递给ORTP端口的一个范例，若要实际使用需要在代码中给出给一个可用的
+rtp地址。
 
 
 ##关于如何使用mediastreamer来编译自己的程序##
